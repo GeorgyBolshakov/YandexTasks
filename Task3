@@ -1,0 +1,34 @@
+def can_reach(order_pos, taxi_pos, timestamp, last_taxi_time, L, S, order_time):
+    time_diff = timestamp - last_taxi_time
+    min_pos = taxi_pos
+    max_pos = (taxi_pos + time_diff * S) % L
+    if min_pos <= max_pos:
+        min_dist = min((order_pos - min_pos) % L, (order_pos - max_pos) % L)
+        max_dist = max((order_pos - min_pos) % L, (order_pos - max_pos) % L)
+    else:
+        min_dist = 0
+        max_dist = L
+    return max_dist <= order_time * S
+N, L, S = map(int, input().split())
+taxi_info = {}
+results = []
+for order_id in range(N):
+    event = input().split()
+    event_type, timestamp = event[0], int(event[1])
+    if event_type == "TAXI":
+        taxi_id, taxi_pos = int(event[2]), int(event[3])
+        taxi_info[taxi_id] = (taxi_pos, timestamp)
+    else:
+        order_pos, order_time = int(event[3]), int(event[4])
+        valid_taxis = []
+        for taxi_id, (taxi_pos, last_taxi_time) in taxi_info.items():
+            if last_taxi_time <= timestamp:
+                if can_reach(order_pos, taxi_pos, timestamp, last_taxi_time, L, S, order_time):
+                    valid_taxis.append(taxi_id)
+        valid_taxis.sort()
+        if not valid_taxis:
+            results.append("-1")
+        else:
+            results.append(" ".join(map(str, valid_taxis[:5])))
+for result in results:
+    print(result)
