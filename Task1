@@ -1,0 +1,15 @@
+import math
+n, m, x, y = map(int, input().split())
+windows = [input() for _ in range(n * x)]
+threshold = math.ceil((x * y) / 2)
+awake = 0
+for i in range (n):
+    for j in range (m):
+        lit_windows = 0
+        for r in range(i * x, (i + 1) * x):
+            for c in range(j * y, (j + 1) * y):
+                if windows[r][c] == 'X':
+                    lit_windows += 1
+        if lit_windows >= threshold:
+            awake += 1
+print(awake)
