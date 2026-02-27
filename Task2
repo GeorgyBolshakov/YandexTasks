@@ -1,0 +1,12 @@
+N = int(input())
+Q = list(map(int, input().split()))
+C = list(map(int, input().split()))
+A, B = map(int, input().split())
+result = 0
+if A == B:
+    result = sum(Q[i] * A for i in range (N))
+else:
+    for i in range(N):
+        Di = A + C[i] * (B - A) // 255
+        result += Q[i] * Di
+print(result)
