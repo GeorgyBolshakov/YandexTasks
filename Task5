@@ -1,0 +1,29 @@
+letter_to_code = {'A': '2', 'B': '22', 'C': '222', 'D': '3', 'E': '33', 'F': '333', 'G': '4', 'H': '44', 'I': '444', 'J': '5', 'K': '55', 'L': '555', 'M': '6', 'N': '66', 'O': '666', 'P': '7', 'Q': '77', 'R': '777', 'S': '7777', 'T': '8', 'U': '88', 'V': '888', 'W': '9', 'X': '99', 'Y': '999', 'Z': '9999'}
+def word_to_code(word):
+    return ''.join(letter_to_code[c] for c in word)
+s = input().strip()
+n = int(input())
+dictionary = [input().strip() for _ in range(n)]
+code_to_word = {word_to_code(word): word for word in dictionary}
+dp = [False] * (len(s) + 1)
+dp[0] = True
+prev = [-1] * (len(s) + 1)
+words_used = [None] * (len(s) + 1)
+for i in range(1, len(s) + 1):
+    for j in range(i):
+        if dp[j]:
+            suffix = s[j:i]
+            if suffix in code_to_word:
+                dp[i] = True
+                prev[i] = j
+                words_used[i] = code_to_word[suffix]
+if not dp[len(s)]:
+    print("No solution")
+else:
+    result = []
+    i = len(s)
+    while i > 0:
+        word = words_used[i]
+        result.append(word)
+        i = prev[i]
+    print(' '.join(reversed(result)))
